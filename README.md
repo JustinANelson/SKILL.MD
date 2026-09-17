@@ -66,8 +66,8 @@ See [`templates/AI-TOOL-LOCATIONS.md`](file:///C:/Users/jnels/Projects/SKILL.MD/
 
 ## Skill Catalog
 
-### 🎨 Vibe Coder Essentials
-Designed to solve the most common frustrations when building apps by prompting:
+### 🎨 Vibe Coder Essentials (13 Skills)
+Designed to solve the most common frustrations and traps when building apps by prompting:
 
 | Skill | Solves This Vibe Coding Pain Point | Trigger Context |
 | :--- | :--- | :--- |
@@ -78,9 +78,15 @@ Designed to solve the most common frustrations when building apps by prompting:
 | **`build-verification`** | Pushed to Vercel/Netlify and the build failed red | Finishing tasks; validates `npm run build` and TypeScript types before claiming success. |
 | **`no-dead-ends`** | Buttons that do nothing and silent mock data | Building UI; eliminates non-working dummy elements, wires forms, and flags demo mock data. |
 | **`human-handoff`** | Confusing walls of technical jargon | Completing prompts; outputs exact localhost URLs, click-by-click test steps, and clear next moves. |
+| **`mobile-ready`** | Broken mobile layout and horizontal scroll leaks | Layouts and pages; enforces 44px+ touch targets, mobile drawers, and zero horizontal scrolling. |
+| **`loading-and-error-states`** | White screen freeze or multi-click duplicates | Async actions; adds skeletons, disables buttons while submitting, and adds error toasts. |
+| **`api-cost-safety`** | Leaked AI keys or accidental $50 credit drains | Integrating LLMs; keeps keys server-side, sets `max_tokens` limits, and debounces inputs. |
+| **`auth-flow-guard`** | Flash of private dashboard UI & null user errors | Authentication flows; guards route transitions, handles guest redirects, and checks null users safely. |
+| **`dark-mode-polish`** | Unreadable dark-on-dark or white-on-white text | Theming & styles; ensures inputs, popovers, dropdowns, and modals have crisp contrast in both modes. |
+| **`dev-server-sanity`** | Port drift (3000 vs 3001) and broken OAuth loops | Dev servers & ports; locks default ports, clears zombie processes, and aligns OAuth redirect URIs. |
 
-### 🛡️ Core Engineering Gates
-Industry-standard software engineering practices and security baselines:
+### 🛡️ Core Engineering Gates (11 Skills)
+Industry-standard software engineering practices, static analysis, and security baselines:
 
 | Skill | Focus & Discipline | Trigger Context |
 | :--- | :--- | :--- |

@@ -6,9 +6,9 @@ automatically by your AI coding assistant when its description matches the curre
 
 ---
 
-## 🎨 Vibe Coder Essentials
+## 🎨 Vibe Coder Essentials (13 Skills)
 
-Designed for rapid, prompt-driven iteration without the common traps of AI-generated code:
+Designed for rapid, prompt-driven building without the common traps, bugs, and blind spots of AI-generated code:
 
 - **protect-existing-features** - Stop the regression loop: never break previously working flows or routes when adding new code.
 - **stack-consistency** - Stop framework sprawl: reuse existing UI libraries, Tailwind/CSS patterns, and state management instead of mixing rival libraries.
@@ -17,10 +17,16 @@ Designed for rapid, prompt-driven iteration without the common traps of AI-gener
 - **build-verification** - Zero deployment surprises: runs production builds and TypeScript checks before claiming completion so Vercel/Netlify never fail.
 - **no-dead-ends** - Honest completion: eliminates fake "dummy" buttons that do nothing, wires forms end-to-end, and flags mock data clearly.
 - **human-handoff** - Clear next steps: delivers exact localhost URLs, click-by-click test instructions, and zero engineering jargon.
+- **mobile-ready** - Clean responsiveness: ensures touch targets (44px+), accessible drawers, and zero horizontal scroll leaks on mobile viewports.
+- **loading-and-error-states** - Zero white screens: adds skeleton loaders, disables buttons while submitting, shows error toasts, and designs helpful empty states.
+- **api-cost-safety** - Credit and secret protection: keeps paid AI keys server-side only, enforces `max_tokens` limits, debounces inputs, and blocks infinite retry loops.
+- **auth-flow-guard** - Rock-solid auth flows: stops flashes of protected content, safely handles null users, and cleans up state on logout.
+- **dark-mode-polish** - High-contrast themes: ensures modals, inputs, and dropdowns adapt cleanly without unreadable white-on-white or dark-on-dark bugs.
+- **dev-server-sanity** - Port and CORS clarity: locks default ports (e.g. 3000), stops OAuth callback mismatches, and prevents CORS traps.
 
 ---
 
-## 🛡️ Core Engineering Gates
+## 🛡️ Core Engineering Gates (11 Skills)
 
 Industry-standard development practices, static analysis, and security baselines:
 
