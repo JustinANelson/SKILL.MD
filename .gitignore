@@ -1,0 +1,22 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local testing & generated artifacts in root
+/.claude/
+/.cursor/
+/.windsurf/
+/.github/
+/AGENTS.md
+/GEMINI.md
+/SKILLS.md
+/AI-TOOL-LOCATIONS.md
+*.log
+*.tmp
