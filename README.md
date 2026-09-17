@@ -2,7 +2,7 @@
 
 A cross-platform scaffolding toolkit and catalog of curated engineering skills for AI coding assistants (Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI / Antigravity, OpenAI Codex, Zed, and more).
 
-Instead of maintaining brittle, monolithic prompts or dumping pages of instructions that saturate context windows, **SKILL.MD** provides modular, task-triggered behavioral guidelines and quality gates that activate only when relevant.
+Whether you are an engineering team enforcing strict quality gates or a **vibe coder** building fast prototypes, **SKILL.MD** provides modular, task-triggered behavioral guidelines that activate only when relevant—keeping assistant context windows lean and focused.
 
 ---
 
@@ -64,21 +64,37 @@ See [`templates/AI-TOOL-LOCATIONS.md`](file:///C:/Users/jnels/Projects/SKILL.MD/
 
 ---
 
-## Available Skills
+## Skill Catalog
+
+### 🎨 Vibe Coder Essentials
+Designed to solve the most common frustrations when building apps by prompting:
+
+| Skill | Solves This Vibe Coding Pain Point | Trigger Context |
+| :--- | :--- | :--- |
+| **`protect-existing-features`** | The AI broke what was working 5 minutes ago | Modifying existing code or adding features; preserves adjacent routes and caller contracts. |
+| **`stack-consistency`** | The AI installed 3 competing UI frameworks | Adding components or styles; forces reuse of existing Tailwind, icons, and UI primitives. |
+| **`environment-readiness`** | Mystery crashes on deploy due to missing `.env` | Adding APIs or secrets; keeps `.env.example` synced and provides friendly missing-key hints. |
+| **`database-safety`** | The AI ran `--force-reset` and wiped all my data | Altering models or schemas; blocks destructive table drops and ensures additive migrations. |
+| **`build-verification`** | Pushed to Vercel/Netlify and the build failed red | Finishing tasks; validates `npm run build` and TypeScript types before claiming success. |
+| **`no-dead-ends`** | Buttons that do nothing and silent mock data | Building UI; eliminates non-working dummy elements, wires forms, and flags demo mock data. |
+| **`human-handoff`** | Confusing walls of technical jargon | Completing prompts; outputs exact localhost URLs, click-by-click test steps, and clear next moves. |
+
+### 🛡️ Core Engineering Gates
+Industry-standard software engineering practices and security baselines:
 
 | Skill | Focus & Discipline | Trigger Context |
 | :--- | :--- | :--- |
-| **`token-efficiency`** | Context & Token Economy | Writing code, exploring repositories, or replying; avoids redundant file dumps and narration. |
-| **`code-conventions`** | Clean Architecture | Consistent formatting, idiomatic naming, avoiding premature abstractions and dead code. |
-| **`testing-before-done`** | Verification | Running existing test suites, linters, and type checkers before claiming completion. |
-| **`commit-hygiene`** | Git Discipline | Conventional commits, single-purpose commits, preserving history, confirming pushes. |
-| **`security-baseline`** | Secure Defaults | Input validation at boundaries, parameterized queries, secret safety, XSS escaping. |
-| **`scope-discipline`** | Minimal Blast Radius | Sticking strictly to requested scope; avoids unprompted refactorings and scope creep. |
-| **`quality-gate`** | Concrete Thresholds | Static analysis gates: `< 3%` code duplication, `80%+` new code test coverage, cyclomatic complexity limits. |
-| **`efficiency-gate`** | Runtime Complexity | Big-O analysis on hot paths, N+1 query prevention, caching, and dependency size budgets. |
-| **`error-resilience`** | Robust Error Handling | Explicit failure handling, defensive guards, safe resource teardown (`finally`/`using`), clear diagnostics. |
-| **`dependency-hygiene`** | Supply Chain Safety | Vetting third-party packages, avoiding utility bloat, committing lockfiles, vulnerability audits. |
-| **`docs-and-changelog`** | Documentation Sync | Keeping READMEs, API docs, CLI flags, and changelogs up-to-date with every functional change. |
+| **`token-efficiency`** | Context Economy | Exploring code or replying; prevents redundant file dumps and narration. |
+| **`code-conventions`** | Clean Architecture | Consistent formatting, idiomatic naming, avoiding premature abstractions. |
+| **`testing-before-done`** | Verification | Running existing test suites and linters before reporting complete. |
+| **`commit-hygiene`** | Git History | Conventional commits, single-purpose commits, preserving history. |
+| **`security-baseline`** | Secure Defaults | Input validation, parameterized queries, secret safety, XSS escaping. |
+| **`scope-discipline`** | Minimal Blast Radius | Sticking strictly to requested scope; avoids unprompted refactorings. |
+| **`quality-gate`** | Concrete Thresholds | Static analysis gates: `< 3%` duplication, `80%+` coverage, cyclomatic limits. |
+| **`efficiency-gate`** | Runtime Complexity | Big-O on hot paths, N+1 query prevention, caching, bundle size budgets. |
+| **`error-resilience`** | Robust Error Handling | Explicit failure handling, defensive guards, safe resource teardown. |
+| **`dependency-hygiene`** | Supply Chain Safety | Vetting third-party packages, avoiding utility bloat, lockfiles. |
+| **`docs-and-changelog`** | Documentation Sync | Keeping READMEs, API docs, CLI flags, and changelogs up to date. |
 
 ---
 
