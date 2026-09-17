@@ -2,7 +2,7 @@
 
 A cross-platform scaffolding toolkit and catalog of curated engineering skills for AI coding assistants (Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI / Antigravity, OpenAI Codex, Zed, and more).
 
-Whether you are an engineering team enforcing strict quality gates or a **vibe coder** building fast prototypes, **SKILL.MD** provides modular, task-triggered behavioral guidelines that activate only when relevant—keeping assistant context windows lean and focused.
+Whether you are an enterprise team enforcing strict quality gates or a **vibe coder** building fast prototypes, **SKILL.MD** provides modular, task-triggered behavioral guidelines that activate only when relevant—keeping assistant context windows lean, focused, and effective.
 
 ---
 
@@ -64,7 +64,7 @@ See [`templates/AI-TOOL-LOCATIONS.md`](file:///C:/Users/jnels/Projects/SKILL.MD/
 
 ---
 
-## Skill Catalog
+## Skill Catalog (30 Total Skills)
 
 ### 🎨 Vibe Coder Essentials (13 Skills)
 Designed to solve the most common frustrations and traps when building apps by prompting:
@@ -101,6 +101,18 @@ Industry-standard software engineering practices, static analysis, and security 
 | **`error-resilience`** | Robust Error Handling | Explicit failure handling, defensive guards, safe resource teardown. |
 | **`dependency-hygiene`** | Supply Chain Safety | Vetting third-party packages, avoiding utility bloat, lockfiles. |
 | **`docs-and-changelog`** | Documentation Sync | Keeping READMEs, API docs, CLI flags, and changelogs up to date. |
+
+### ⚙️ Architecture & DevOps Standards (6 Skills)
+Production-grade patterns for APIs, accessibility, containerization, and automation:
+
+| Skill | Focus & Domain | Trigger Context |
+| :--- | :--- | :--- |
+| **`accessibility-baseline`** | a11y & Semantic HTML | Writing UI components and dialogs; enforces WCAG 2.1 AA, keyboard focus, and ARIA labels. |
+| **`api-design-standards`** | REST & API Conventions | Building endpoints; enforces plural nouns, HTTP verb semantics, status codes, and envelopes. |
+| **`seo-and-metadata`** | Social Previews & SEO | Public web pages; configures Open Graph cards, dynamic titles, meta tags, and sitemaps. |
+| **`schema-validation`** | Runtime Type Safety | Application boundaries; validates inputs with Zod/Pydantic, prevents mass-assignment. |
+| **`container-hygiene`** | Docker & Containers | Writing Dockerfiles; enforces multi-stage builds, non-root users, .dockerignore, and cache optimization. |
+| **`ci-cd-pipeline`** | Automated Workflows | GitHub Actions; configures cached dependencies, matrix testing, and least-privilege permissions. |
 
 ---
 

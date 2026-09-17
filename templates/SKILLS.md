@@ -28,7 +28,7 @@ Designed for rapid, prompt-driven building without the common traps, bugs, and b
 
 ## 🛡️ Core Engineering Gates (11 Skills)
 
-Industry-standard development practices, static analysis, and security baselines:
+Industry-standard software engineering practices, static analysis, and security baselines:
 
 - **token-efficiency** - Keep assistant context and tool responses lean; avoid redundant reads and narration.
 - **code-conventions** - Consistent style, idiomatic naming, avoiding premature abstractions and dead code.
@@ -41,6 +41,19 @@ Industry-standard development practices, static analysis, and security baselines
 - **error-resilience** - Explicit error handling, defensive guards, safe resource cleanup, and actionable diagnostics.
 - **dependency-hygiene** - Supply-chain vetting, minimal dependencies, locked versions, and vulnerability audits.
 - **docs-and-changelog** - Keeping README, API guides, configuration docs, and changelogs in lockstep with changes.
+
+---
+
+## ⚙️ Architecture & DevOps Standards (6 Skills)
+
+Essential industry standards for APIs, accessibility, deployment, and infrastructure:
+
+- **accessibility-baseline** - WCAG 2.1 AA compliance: semantic HTML, keyboard focus navigation, ARIA labels, and accessible dialogs.
+- **api-design-standards** - Clean RESTful endpoints: plural nouns, HTTP verb semantics, standard status codes, and uniform response envelopes.
+- **seo-and-metadata** - Social sharing & discovery: Open Graph tags, Twitter cards, dynamic titles, meta descriptions, and sitemaps.
+- **schema-validation** - Runtime type safety: Zod/Pydantic validation at boundaries, safe error mapping, and input sanitization.
+- **container-hygiene** - Production container best practices: multi-stage Dockerfiles, non-root users, .dockerignore, and layer caching.
+- **ci-cd-pipeline** - Reliable automation: cached dependencies, parallel test matrices, least-privilege permissions, and GitHub Actions security.
 
 ---
 
