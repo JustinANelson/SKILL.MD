@@ -118,7 +118,7 @@ See [`templates/AI-TOOL-LOCATIONS.md`](file:///C:/Users/jnels/Projects/SKILL.MD/
 ## Skill Catalog (43 Total Skills)
 
 ### 🎨 Vibe Coder Essentials (10 Skills)
-Designed to solve the most common frustrations and traps when building apps by prompting.
+Designed to solve the most common frustrations and traps when building apps by prompting. Install with `--category vibe-coder-essentials`.
 
 | Skill | Solves This Vibe Coding Pain Point | What It Does |
 | :--- | :--- | :--- |
@@ -134,7 +134,7 @@ Designed to solve the most common frustrations and traps when building apps by p
 | **`stack-consistency`** | The AI installed 3 competing UI frameworks | Stop framework sprawl: reuse existing UI libraries, Tailwind/CSS patterns, and state management instead of mixing rival libraries. |
 
 ### 🛡️ Core Engineering Gates (8 Skills)
-Industry-standard software engineering practices, static analysis, and quality baselines.
+Industry-standard software engineering practices, static analysis, and quality baselines. Install with `--category core-engineering-gates`.
 
 | Skill | Focus & Discipline | What It Does |
 | :--- | :--- | :--- |
@@ -148,7 +148,7 @@ Industry-standard software engineering practices, static analysis, and quality b
 | **`testing-before-done`** | Verification | Verify work thoroughly (tests, linters, types) before reporting complete. |
 
 ### ⚙️ Architecture & DevOps Standards (6 Skills)
-Production-grade patterns for APIs, accessibility, containerization, and automation.
+Production-grade patterns for APIs, accessibility, containerization, and automation. Install with `--category architecture-and-devops`.
 
 | Skill | Focus & Domain | What It Does |
 | :--- | :--- | :--- |
@@ -160,7 +160,7 @@ Production-grade patterns for APIs, accessibility, containerization, and automat
 | **`seo-and-metadata`** | Social Previews & SEO | Social sharing & discovery: Open Graph tags, Twitter cards, dynamic titles, meta descriptions, and sitemaps. |
 
 ### 🤖 AI & LLM App Engineering (6 Skills)
-Guardrails for apps that call language models: cost, prompt injection, output validation, evals, streaming, and retrieval.
+Guardrails for apps that call language models: cost, prompt injection, output validation, evals, streaming, and retrieval. Install with `--category ai-llm-engineering`.
 
 | Skill | Failure It Prevents | What It Does |
 | :--- | :--- | :--- |
@@ -172,7 +172,7 @@ Guardrails for apps that call language models: cost, prompt injection, output va
 | **`streaming-ux`** | A 30-second spinner, then a wall of text (or nothing) | Responsive AI interfaces: token streaming, Stop buttons that actually cancel upstream, and clean recovery when a stream fails halfway. |
 
 ### 🔐 Security & Privacy (5 Skills)
-Defenses beyond secure defaults: authorization, abuse prevention, secrets, and personal data handling.
+Defenses beyond secure defaults: authorization, abuse prevention, secrets, and personal data handling. Install with `--category security-and-privacy`.
 
 | Skill | Threat It Addresses | What It Does |
 | :--- | :--- | :--- |
@@ -183,7 +183,7 @@ Defenses beyond secure defaults: authorization, abuse prevention, secrets, and p
 | **`security-baseline`** | Injection, XSS, and hardcoded secrets | Core security habits: input sanitization, secret management, injection prevention. |
 
 ### 🧭 Agent Workflow & Collaboration (8 Skills)
-How the assistant itself works: staying in scope, staying safe, managing context, and handing off clearly.
+How the assistant itself works: staying in scope, staying safe, managing context, and handing off clearly. Install with `--category agent-workflow`.
 
 | Skill | Assistant Failure It Prevents | What It Does |
 | :--- | :--- | :--- |
@@ -209,9 +209,33 @@ Options:
                         (default: claude)
   -f, --force           Overwrite existing files instead of skipping
   -n, --dry-run         Preview files that will be created without modifying disk
-  -l, --list            List all available skills with their triggers
+  -c, --category LIST   Only install skills from these categories (comma-separated
+                        or repeated). PowerShell: -Category
+  -l, --list            List all available skills, grouped by category
   -h, --help            Show help message
 ```
+
+### Installing Only Some Categories
+
+Every skill belongs to one category, and its id is shown in the Skill Catalog above and by `--list`. Use `--category` to install a subset. This matters most for the aggregated formats (`copilot`, `gemini`, `agents`), which put every selected skill into one file that loads in full.
+
+```bash
+# Bash: comma-separated or repeated
+./init-skills.sh --category ai-llm-engineering,security-and-privacy
+./init-skills.sh -t agents -c agent-workflow -c core-engineering-gates
+```
+
+```powershell
+# PowerShell
+.\init-skills.ps1 -Category ai-llm-engineering,security-and-privacy
+```
+
+```cmd
+:: Command Prompt splits arguments on commas, so quote the list (or repeat -c)
+init-skills.bat "C:\path\to\my-app" -c "ai-llm-engineering,security-and-privacy"
+```
+
+Combine with `--list` to preview what a category contains. When filtering, the generated `SKILLS.md` index lists only the selected categories.
 
 ---
 

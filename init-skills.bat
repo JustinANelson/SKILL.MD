@@ -10,29 +10,12 @@ if not exist "%SRC%" (
   exit /b 1
 )
 
-REM If advanced flags or arguments are passed, delegate to init-skills.ps1 for rich feature support
-if not "%~1"=="" (
-  if "%~1"=="/?" goto show_help
-  if "%~1"=="-h" goto show_help
-  if "%~1"=="--help" goto show_help
-  if "%~1"=="-l" goto run_ps
-  if "%~1"=="--list" goto run_ps
-  if "%~1"=="-t" goto run_ps
-  if "%~1"=="--tool" goto run_ps
-  if "%~1"=="-n" goto run_ps
-  if "%~1"=="--dry-run" goto run_ps
-  if "%~1"=="-f" goto run_ps
-  if "%~1"=="--force" goto run_ps
-)
+REM With no arguments, install Claude Code skills into the current directory.
+REM Any arguments (target dir and/or flags) are translated and passed to init-skills.ps1.
+if not "%~1"=="" goto run_ps
 
 :run_batch_default
-REM Determine target directory (first arg if it's a directory, else current working directory)
 set "TARGET=%CD%"
-if not "%~1"=="" (
-  if exist "%~1\" (
-    set "TARGET=%~f1"
-  )
-)
 
 echo.
 echo ========================================================
@@ -77,23 +60,84 @@ echo.
 exit /b 0
 
 :run_ps
-where powershell >nul 2>&1
-if %errorlevel% equ 0 (
-  powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%init-skills.ps1" %*
-  exit /b %errorlevel%
-) else (
-  echo [error] PowerShell is required to process advanced flags like %1.
+REM Translate GNU-style flags into init-skills.ps1 parameters.
+REM Note: cmd splits arguments on commas and "=", so --tool=all works but a
+REM comma-separated category list must be quoted or given as repeated flags.
+set "PS_ARGS="
+set "CATS="
+
+:parse_args
+if "%~1"=="" goto invoke_ps
+if "%~1"=="/?" goto show_help
+if /i "%~1"=="-h" goto show_help
+if /i "%~1"=="--help" goto show_help
+if /i "%~1"=="-l" (set "PS_ARGS=!PS_ARGS! -List" & shift & goto parse_args)
+if /i "%~1"=="--list" (set "PS_ARGS=!PS_ARGS! -List" & shift & goto parse_args)
+if /i "%~1"=="-f" (set "PS_ARGS=!PS_ARGS! -Force" & shift & goto parse_args)
+if /i "%~1"=="--force" (set "PS_ARGS=!PS_ARGS! -Force" & shift & goto parse_args)
+if /i "%~1"=="-n" (set "PS_ARGS=!PS_ARGS! -DryRun" & shift & goto parse_args)
+if /i "%~1"=="--dry-run" (set "PS_ARGS=!PS_ARGS! -DryRun" & shift & goto parse_args)
+if /i "%~1"=="-t" goto arg_tool
+if /i "%~1"=="--tool" goto arg_tool
+if /i "%~1"=="-c" goto arg_category
+if /i "%~1"=="--category" goto arg_category
+set "ARG=%~1"
+if "!ARG:~0,1!"=="-" (
+  echo [error] Unknown option: %~1
+  goto show_help_error
+)
+set "PS_ARGS=!PS_ARGS! -Target "%~f1""
+shift
+goto parse_args
+
+:arg_tool
+if "%~2"=="" (
+  echo [error] %~1 requires a value
   exit /b 1
 )
+set "PS_ARGS=!PS_ARGS! -Tool "%~2""
+shift
+shift
+goto parse_args
+
+:arg_category
+if "%~2"=="" (
+  echo [error] %~1 requires a value
+  exit /b 1
+)
+if defined CATS (set "CATS=!CATS!,%~2") else (set "CATS=%~2")
+shift
+shift
+goto parse_args
+
+:invoke_ps
+if defined CATS set "PS_ARGS=!PS_ARGS! -Category "!CATS!""
+where powershell >nul 2>&1
+if %errorlevel% neq 0 (
+  echo [error] PowerShell is required when passing arguments to init-skills.bat.
+  exit /b 1
+)
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%init-skills.ps1" !PS_ARGS!
+exit /b %errorlevel%
 
 :show_help
+call :print_help
+exit /b 0
+
+:show_help_error
+call :print_help
+exit /b 1
+
+:print_help
 echo Usage: init-skills.bat [TARGET_DIR] [OPTIONS]
 echo.
 echo Options:
 echo   --tool, -t [claude^|cursor^|windsurf^|copilot^|gemini^|agents^|all]
+echo   --category, -c LIST  Only install these categories (quote comma lists,
+echo                        e.g. -c "ai-llm-engineering,agent-workflow")
 echo   --force, -f      Overwrite existing files
 echo   --dry-run, -n    Preview actions without writing
-echo   --list, -l       List all available skills
+echo   --list, -l       List all available skills, grouped by category
 echo   --help, -h       Display this help message
 echo.
 exit /b 0

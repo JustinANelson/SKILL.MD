@@ -24,13 +24,17 @@
 .PARAMETER DryRun
     Display actions that would be taken without writing files to disk.
 
+.PARAMETER Category
+    Only install skills from these categories (comma-separated or an array). Run -List to see category ids.
+
 .PARAMETER List
-    List all available skills in the templates directory.
+    List all available skills in the templates directory, grouped by category.
 
 .EXAMPLE
     .\init-skills.ps1
     .\init-skills.ps1 -Target "C:\Users\User\Projects\MyApp" -Tool cursor
     .\init-skills.ps1 -Tool all -Force
+    .\init-skills.ps1 -Category ai-llm-engineering,agent-workflow
     .\init-skills.ps1 -List
 #>
 
@@ -49,6 +53,9 @@ param(
 
     [Alias("n")]
     [switch]$DryRun,
+
+    [Alias("c")]
+    [string[]]$Category = @(),
 
     [Alias("l")]
     [switch]$List
@@ -103,9 +110,10 @@ $SkillsData = @()
 foreach ($folder in $SkillFolders) {
     $skillFile = Join-Path $folder.FullName "SKILL.md"
     if (Test-Path -LiteralPath $skillFile) {
-        $content = Get-Content -LiteralPath $skillFile -Raw
+        $content = Get-Content -LiteralPath $skillFile -Raw -Encoding UTF8
         $name = $folder.Name
         $description = ""
+        $skillCategory = ""
 
         if ($content -match "(?ms)^---\s*\r?\n(.*?)\r?\n---") {
             $frontmatter = $matches[1]
@@ -114,6 +122,9 @@ foreach ($folder in $SkillFolders) {
             }
             if ($frontmatter -match "description:\s*([^\r\n]+)") {
                 $description = $matches[1].Trim()
+            }
+            if ($frontmatter -match "(?m)^\s+category:\s*([^\r\n]+)") {
+                $skillCategory = $matches[1].Trim().Trim("'", '"')
             }
         }
 
@@ -124,6 +135,7 @@ foreach ($folder in $SkillFolders) {
             Name        = $name
             FolderName  = $folder.Name
             Description = $description
+            Category    = $skillCategory
             FullContent = $content
             Body        = $body
             SourceFile  = $skillFile
@@ -131,14 +143,62 @@ foreach ($folder in $SkillFolders) {
     }
 }
 
+function Remove-TempTemplates {
+    if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
+        Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+# Load categories (id -> title) in display order
+$Categories = [ordered]@{}
+$categoriesFile = Join-Path $TemplateDir "categories.txt"
+if (Test-Path -LiteralPath $categoriesFile) {
+    foreach ($line in Get-Content -LiteralPath $categoriesFile -Encoding UTF8) {
+        if ($line -match "^\s*(#|$)") { continue }
+        $parts = $line -split "\|"
+        $Categories[$parts[0].Trim()] = $parts[1].Trim()
+    }
+}
+
+# Validate -Category (accepts "a,b" strings as well as arrays)
+$SelectedCategories = @($Category | ForEach-Object { $_ -split "," } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+foreach ($id in $SelectedCategories) {
+    if (-not $Categories.Contains($id)) {
+        Write-Host "[error] Unknown category: $id" -ForegroundColor Red
+        Write-Host "Valid categories: $($Categories.Keys -join ' ')"
+        Remove-TempTemplates
+        exit 1
+    }
+}
+if ($SelectedCategories.Count -gt 0) {
+    $SkillsData = @($SkillsData | Where-Object { $SelectedCategories -contains $_.Category })
+}
+if ($SkillsData.Count -eq 0) {
+    Write-Host "[error] No skills match the selected categories." -ForegroundColor Red
+    Remove-TempTemplates
+    exit 1
+}
+
 # Handle -List flag
 if ($List) {
     Write-Host "`nAvailable Skills in Templates ($($SkillsData.Count) found):" -ForegroundColor Cyan
     Write-Host ("-" * 75)
-    foreach ($s in $SkillsData) {
-        Write-Host ("  {0,-22} " -f $s.Name) -NoNewline -ForegroundColor Green
-        Write-Host $s.Description
+    $groups = @($Categories.Keys | ForEach-Object { @{ Id = $_; Title = "$($Categories[$_])  [-Category $_]" } })
+    $groups += @{ Id = $null; Title = "Uncategorized" }
+    foreach ($g in $groups) {
+        if ($g.Id) {
+            $members = @($SkillsData | Where-Object { $_.Category -eq $g.Id })
+        } else {
+            $members = @($SkillsData | Where-Object { -not $Categories.Contains($_.Category) })
+        }
+        if ($members.Count -eq 0) { continue }
+        Write-Host "`n  $($g.Title)" -ForegroundColor Cyan
+        foreach ($s in $members) {
+            Write-Host ("    {0,-26} " -f $s.Name) -NoNewline -ForegroundColor Green
+            Write-Host $s.Description
+        }
     }
+    Write-Host ""
     Write-Host ("-" * 75)`n
     if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
         Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
@@ -160,6 +220,7 @@ Write-Host "`n========================================================" -Foregro
 Write-Host " Initializing AI Skills & Guidelines" -ForegroundColor Cyan
 Write-Host " Tool:   $Tool" -ForegroundColor Gray
 Write-Host " Target: $ResolvedTarget" -ForegroundColor Gray
+if ($SelectedCategories.Count -gt 0) { Write-Host " Categories: $($SelectedCategories -join ', ')" -ForegroundColor Gray }
 if ($DryRun) { Write-Host " Mode:   DRY-RUN (no files will be written)" -ForegroundColor Yellow }
 Write-Host "========================================================`n" -ForegroundColor Cyan
 
@@ -190,7 +251,7 @@ function Save-FileContent {
             if ($DryRun) {
                 Write-OutputAction "plan" "$DestinationPath (overwrite)"
             } else {
-                [System.IO.File]::WriteAllText($DestinationPath, $Content, [System.Text.Encoding]::UTF8)
+                [System.IO.File]::WriteAllText($DestinationPath, $Content, (New-Object System.Text.UTF8Encoding $false))
                 Write-OutputAction "ok" "$DestinationPath (overwritten)"
             }
         } else {
@@ -200,7 +261,7 @@ function Save-FileContent {
         if ($DryRun) {
             Write-OutputAction "plan" $DestinationPath
         } else {
-            [System.IO.File]::WriteAllText($DestinationPath, $Content, [System.Text.Encoding]::UTF8)
+            [System.IO.File]::WriteAllText($DestinationPath, $Content, (New-Object System.Text.UTF8Encoding $false))
             Write-OutputAction "ok" $DestinationPath
         }
     }
@@ -237,7 +298,14 @@ if ($Tool -in @("claude", "all")) {
         $srcPath = Join-Path $TemplateDir $file
         $destPath = Join-Path $ResolvedTarget $file
         if (Test-Path -LiteralPath $srcPath) {
-            $content = Get-Content -LiteralPath $srcPath -Raw
+            $content = Get-Content -LiteralPath $srcPath -Raw -Encoding UTF8
+            if ($file -eq "SKILLS.md" -and $SelectedCategories.Count -gt 0) {
+                # Drop index sections for categories that were not selected
+                $content = [regex]::Replace($content, "(?s)<!-- BEGIN CATEGORY (\S+) -->.*?<!-- END CATEGORY \S+ -->\r?\n?", {
+                    param($m)
+                    if ($SelectedCategories -contains $m.Groups[1].Value) { $m.Value } else { "" }
+                })
+            }
             Save-FileContent -DestinationPath $destPath -Content $content
         }
     }

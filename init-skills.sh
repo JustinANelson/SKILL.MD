@@ -18,6 +18,7 @@ TOOL="claude"
 FORCE=0
 DRY_RUN=0
 LIST_ONLY=0
+CATEGORY_FILTER=""
 
 show_help() {
   cat <<EOF
@@ -33,13 +34,16 @@ Options:
                              gemini, agents, all (default: claude)
   -f, --force                Overwrite existing files
   -n, --dry-run              Display operations without writing to disk
-  -l, --list                 List all available skills
+  -c, --category LIST        Only install skills from these categories
+                             (comma-separated or repeated; see --list for ids)
+  -l, --list                 List all available skills, grouped by category
   -h, --help                 Show this help message
 
 Examples:
   $(basename "$0")                                # Initialize Claude Code skills in current dir
   $(basename "$0") /path/to/project -t cursor     # Initialize Cursor rules in target dir
   $(basename "$0") -t all -f                      # Initialize all tool formats, overwriting existing
+  $(basename "$0") -c ai-llm-engineering,agent-workflow   # Install two categories only
   $(basename "$0") -l                             # List all available skills
 EOF
 }
@@ -69,6 +73,15 @@ while [[ $# -gt 0 ]]; do
       ;;
     --tool=*)
       TOOL="${1#*=}"
+      shift
+      ;;
+    -c|--category)
+      if [[ $# -lt 2 ]]; then echo "[error] $1 requires a value" >&2; exit 1; fi
+      CATEGORY_FILTER="${CATEGORY_FILTER:+${CATEGORY_FILTER},}$2"
+      shift 2
+      ;;
+    --category=*)
+      CATEGORY_FILTER="${CATEGORY_FILTER:+${CATEGORY_FILTER},}${1#*=}"
       shift
       ;;
     -*)
@@ -110,18 +123,85 @@ if [[ ! -d "${SKILLS_DIR}" ]]; then
   exit 1
 fi
 
-# List skills
+CATEGORIES_FILE="${TEMPLATES_DIR}/categories.txt"
+
+# Print category ids and titles from categories.txt as "id|title" lines.
+list_categories() {
+  [[ -f "${CATEGORIES_FILE}" ]] || return 0
+  tr -d '\r' < "${CATEGORIES_FILE}" | awk -F'|' '
+    /^[[:space:]]*(#|$)/ { next }
+    { id = $1; title = $2; gsub(/^[ \t]+|[ \t]+$/, "", id); gsub(/^[ \t]+|[ \t]+$/, "", title); print id "|" title }'
+}
+
+# Print metadata.category from a SKILL.md frontmatter (empty if missing).
+skill_category() {
+  tr -d '\r' < "$1" | awk '
+    /^---$/ { c++; if (c == 2) exit; next }
+    c == 1 && /^[ \t]+category:/ { sub(/^[ \t]+category:[ \t]*/, ""); gsub(/[\047"]/, ""); print; exit }'
+}
+
+# Validate --category ids and normalize the filter to ",id1,id2,".
+if [[ -n "${CATEGORY_FILTER}" ]]; then
+  valid_ids=",$(list_categories | cut -d'|' -f1 | paste -sd, -),"
+  normalized=","
+  IFS=',' read -r -a requested <<< "${CATEGORY_FILTER}"
+  for id in "${requested[@]}"; do
+    id="$(printf '%s' "${id}" | tr -d '[:space:]')"
+    [[ -z "${id}" ]] && continue
+    if [[ "${valid_ids}" != *",${id},"* ]]; then
+      echo "[error] Unknown category: ${id}" >&2
+      echo "Valid categories: $(list_categories | cut -d'|' -f1 | paste -sd' ' -)" >&2
+      exit 1
+    fi
+    normalized="${normalized}${id},"
+  done
+  CATEGORY_FILTER="${normalized}"
+  [[ "${CATEGORY_FILTER}" == "," ]] && CATEGORY_FILTER=""
+fi
+
+category_selected() {
+  [[ -z "${CATEGORY_FILTER}" || "${CATEGORY_FILTER}" == *",$1,"* ]]
+}
+
+# Skills to install, after applying --category.
+SELECTED_SKILLS=()
+for skill_path in "${SKILLS_DIR}"/*; do
+  if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
+    if category_selected "$(skill_category "${skill_path}/SKILL.md")"; then
+      SELECTED_SKILLS+=("${skill_path}")
+    fi
+  fi
+done
+
+if [[ ${#SELECTED_SKILLS[@]} -eq 0 ]]; then
+  echo "[error] No skills match the selected categories." >&2
+  exit 1
+fi
+
+# List skills, grouped by category
 if [[ ${LIST_ONLY} -eq 1 ]]; then
   echo ""
-  echo "Available Skills in Templates:"
+  echo "Available Skills in Templates (${#SELECTED_SKILLS[@]}):"
   echo "------------------------------------------------------------------------"
-  for skill_path in "${SKILLS_DIR}"/*; do
-    if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
-      skill_name="$(basename "${skill_path}")"
+  while IFS='|' read -r cat_id cat_title; do
+    category_selected "${cat_id}" || continue
+    echo ""
+    echo "  ${cat_title}  [--category ${cat_id}]"
+    for skill_path in "${SELECTED_SKILLS[@]}"; do
+      [[ "$(skill_category "${skill_path}/SKILL.md")" == "${cat_id}" ]] || continue
       desc=$(sed -n '/^description:/s/^description:[[:space:]]*//p' "${skill_path}/SKILL.md" | head -n 1)
-      printf "  %-22s %s\n" "${skill_name}" "${desc}"
-    fi
+      printf "    %-26s %s\n" "$(basename "${skill_path}")" "${desc}"
+    done
+  done < <(list_categories)
+  known_ids=",$(list_categories | cut -d'|' -f1 | paste -sd, -),"
+  header_printed=0
+  for skill_path in "${SELECTED_SKILLS[@]}"; do
+    [[ "${known_ids}" != *",$(skill_category "${skill_path}/SKILL.md"),"* ]] || continue
+    if [[ ${header_printed} -eq 0 ]]; then echo ""; echo "  Uncategorized"; header_printed=1; fi
+    desc=$(sed -n '/^description:/s/^description:[[:space:]]*//p' "${skill_path}/SKILL.md" | head -n 1)
+    printf "    %-26s %s\n" "$(basename "${skill_path}")" "${desc}"
   done
+  echo ""
   echo "------------------------------------------------------------------------"
   echo ""
   exit 0
@@ -142,6 +222,7 @@ echo "========================================================"
 echo " Initializing AI Skills & Guidelines"
 echo " Tool:   ${TOOL}"
 echo " Target: ${TARGET}"
+if [[ -n "${CATEGORY_FILTER}" ]]; then echo " Categories: $(printf "%s" "${CATEGORY_FILTER}" | sed -e "s/^,//" -e "s/,$//" -e "s/,/, /g")"; fi
 if [[ ${DRY_RUN} -eq 1 ]]; then echo " Mode:   DRY-RUN (no files will be written)"; fi
 echo "========================================================"
 echo ""
@@ -218,7 +299,7 @@ generate_aggregated() {
   local out=""
 
   out="# ${title}\n\n${subtitle}\n\n---\n\n"
-  for skill_path in "${SKILLS_DIR}"/*; do
+  for skill_path in "${SELECTED_SKILLS[@]}"; do
     if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
       skill_name="$(basename "${skill_path}")"
       desc=$(sed -n '/^description:/s/^description:[[:space:]]*//p' "${skill_path}/SKILL.md" | head -n 1)
@@ -233,10 +314,19 @@ generate_aggregated() {
 # 1. Claude Code
 if [[ "${TOOL}" == "claude" || "${TOOL}" == "all" ]]; then
   echo "  [info] Targeting Claude Code (.claude/skills/)..."
-  copy_or_skip "${TEMPLATES_DIR}/SKILLS.md" "${TARGET}/SKILLS.md"
+  if [[ -z "${CATEGORY_FILTER}" ]]; then
+    copy_or_skip "${TEMPLATES_DIR}/SKILLS.md" "${TARGET}/SKILLS.md"
+  else
+    # Drop index sections for categories that were not selected.
+    index=$(tr -d '\r' < "${TEMPLATES_DIR}/SKILLS.md" | awk -v keep="${CATEGORY_FILTER}" '
+      /^<!-- BEGIN CATEGORY / { id = $4; skip = index(keep, "," id ",") == 0 }
+      !skip { print }
+      /^<!-- END CATEGORY / { skip = 0 }')
+    write_or_skip "${index}" "${TARGET}/SKILLS.md"
+  fi
   copy_or_skip "${TEMPLATES_DIR}/AI-TOOL-LOCATIONS.md" "${TARGET}/AI-TOOL-LOCATIONS.md"
 
-  for skill_path in "${SKILLS_DIR}"/*; do
+  for skill_path in "${SELECTED_SKILLS[@]}"; do
     if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
       skill_name="$(basename "${skill_path}")"
       copy_or_skip "${skill_path}/SKILL.md" "${TARGET}/.claude/skills/${skill_name}/SKILL.md"
@@ -247,7 +337,7 @@ fi
 # 2. Cursor (.cursor/rules/<name>.mdc)
 if [[ "${TOOL}" == "cursor" || "${TOOL}" == "all" ]]; then
   echo "  [info] Targeting Cursor (.cursor/rules/)..."
-  for skill_path in "${SKILLS_DIR}"/*; do
+  for skill_path in "${SELECTED_SKILLS[@]}"; do
     if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
       skill_name="$(basename "${skill_path}")"
       desc=$(sed -n '/^description:/s/^description:[[:space:]]*//p' "${skill_path}/SKILL.md" | head -n 1)
@@ -261,7 +351,7 @@ fi
 # 3. Windsurf (.windsurf/rules/<name>.md)
 if [[ "${TOOL}" == "windsurf" || "${TOOL}" == "all" ]]; then
   echo "  [info] Targeting Windsurf (.windsurf/rules/)..."
-  for skill_path in "${SKILLS_DIR}"/*; do
+  for skill_path in "${SELECTED_SKILLS[@]}"; do
     if [[ -d "${skill_path}" && -f "${skill_path}/SKILL.md" ]]; then
       skill_name="$(basename "${skill_path}")"
       copy_or_skip "${skill_path}/SKILL.md" "${TARGET}/.windsurf/rules/${skill_name}.md"

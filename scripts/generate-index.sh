@@ -104,10 +104,12 @@ This project uses modular AI Agent Skills. Each skill lives in its own folder
 (e.g., `.claude/skills/NAME/SKILL.md` or `.cursor/rules/NAME.mdc`) and is loaded
 automatically by your AI coding assistant when its description matches the current task.
 EOF
+  # Category markers let the installers drop sections excluded by --category.
   for id in "${CAT_IDS[@]}"; do
     [[ ${CAT_COUNT[${id}]} -gt 0 ]] || continue
-    printf '\n---\n\n## %s (%s)\n\n%s\n\n%s' "${CAT_TITLE[${id}]}" "$(plural "${CAT_COUNT[${id}]}")" \
-      "${CAT_INTRO[${id}]}" "${INDEX_ROWS[${id}]}"
+    printf '\n<!-- BEGIN CATEGORY %s -->\n\n---\n\n## %s (%s)\n\n%s\n\n%s<!-- END CATEGORY %s -->\n' \
+      "${id}" "${CAT_TITLE[${id}]}" "$(plural "${CAT_COUNT[${id}]}")" "${CAT_INTRO[${id}]}" \
+      "${INDEX_ROWS[${id}]}" "${id}"
   done
   cat <<'EOF'
 
@@ -137,8 +139,8 @@ build_catalog() {
   printf '%s\n## Skill Catalog (%s Total Skills)\n' "${BEGIN_MARKER}" "${total}"
   for id in "${CAT_IDS[@]}"; do
     [[ ${CAT_COUNT[${id}]} -gt 0 ]] || continue
-    printf '\n### %s (%s)\n%s\n\n| Skill | %s | What It Does |\n| :--- | :--- | :--- |\n%s' \
-      "${CAT_TITLE[${id}]}" "$(plural "${CAT_COUNT[${id}]}")" "${CAT_INTRO[${id}]}" \
+    printf '\n### %s (%s)\n%s Install with `--category %s`.\n\n| Skill | %s | What It Does |\n| :--- | :--- | :--- |\n%s' \
+      "${CAT_TITLE[${id}]}" "$(plural "${CAT_COUNT[${id}]}")" "${CAT_INTRO[${id}]}" "${id}" \
       "${CAT_COLUMN[${id}]}" "${README_ROWS[${id}]}"
   done
   printf '%s\n' "${END_MARKER}"

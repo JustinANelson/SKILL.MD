@@ -4,6 +4,8 @@ This project uses modular AI Agent Skills. Each skill lives in its own folder
 (e.g., `.claude/skills/NAME/SKILL.md` or `.cursor/rules/NAME.mdc`) and is loaded
 automatically by your AI coding assistant when its description matches the current task.
 
+<!-- BEGIN CATEGORY vibe-coder-essentials -->
+
 ---
 
 ## 🎨 Vibe Coder Essentials (10 Skills)
@@ -20,6 +22,9 @@ Designed to solve the most common frustrations and traps when building apps by p
 - **mobile-ready** - Clean responsiveness: ensures touch targets (44px+), accessible drawers, and zero horizontal scroll leaks on mobile viewports.
 - **no-dead-ends** - Honest completion: eliminates fake "dummy" buttons that do nothing, wires forms end-to-end, and flags mock data clearly.
 - **stack-consistency** - Stop framework sprawl: reuse existing UI libraries, Tailwind/CSS patterns, and state management instead of mixing rival libraries.
+<!-- END CATEGORY vibe-coder-essentials -->
+
+<!-- BEGIN CATEGORY core-engineering-gates -->
 
 ---
 
@@ -35,6 +40,9 @@ Industry-standard software engineering practices, static analysis, and quality b
 - **error-resilience** - Explicit error handling, defensive guards, safe resource cleanup, and actionable diagnostics.
 - **quality-gate** - Concrete static analysis thresholds, cyclomatic complexity limits, and test coverage standards.
 - **testing-before-done** - Verify work thoroughly (tests, linters, types) before reporting complete.
+<!-- END CATEGORY core-engineering-gates -->
+
+<!-- BEGIN CATEGORY architecture-and-devops -->
 
 ---
 
@@ -48,6 +56,9 @@ Production-grade patterns for APIs, accessibility, containerization, and automat
 - **container-hygiene** - Production container best practices: multi-stage Dockerfiles, non-root users, .dockerignore, and layer caching.
 - **schema-validation** - Runtime type safety: Zod/Pydantic validation at boundaries, safe error mapping, and input sanitization.
 - **seo-and-metadata** - Social sharing & discovery: Open Graph tags, Twitter cards, dynamic titles, meta descriptions, and sitemaps.
+<!-- END CATEGORY architecture-and-devops -->
+
+<!-- BEGIN CATEGORY ai-llm-engineering -->
 
 ---
 
@@ -61,6 +72,9 @@ Guardrails for apps that call language models: cost, prompt injection, output va
 - **prompt-regression-evals** - Small eval sets for every prompt: stored test cases, before/after pass rates, and no prompt or model swaps on vibes alone.
 - **rag-hygiene** - Trustworthy retrieval: structure-aware chunking, per-user access filters at query time, source citations, and re-indexing when content changes.
 - **streaming-ux** - Responsive AI interfaces: token streaming, Stop buttons that actually cancel upstream, and clean recovery when a stream fails halfway.
+<!-- END CATEGORY ai-llm-engineering -->
+
+<!-- BEGIN CATEGORY security-and-privacy -->
 
 ---
 
@@ -73,6 +87,9 @@ Defenses beyond secure defaults: authorization, abuse prevention, secrets, and p
 - **rate-limiting-and-abuse** - Abuse-resistant endpoints: per-IP and per-account limits, backoff on failures, bot checks on public forms, and quotas on costly operations.
 - **secrets-management** - Secret lifecycle discipline: least-privilege keys per environment, nothing in git or client bundles, and immediate rotation when one leaks.
 - **security-baseline** - Core security habits: input sanitization, secret management, injection prevention.
+<!-- END CATEGORY security-and-privacy -->
+
+<!-- BEGIN CATEGORY agent-workflow -->
 
 ---
 
@@ -88,6 +105,7 @@ How the assistant itself works: staying in scope, staying safe, managing context
 - **scope-discipline** - Stay strictly inside requested scope; avoid drive-by refactoring.
 - **session-notes** - Durable working memory: a short progress file with goal, decisions, status, next steps, and gotchas, read on resume and updated at milestones.
 - **token-efficiency** - Keep assistant context and tool responses lean; avoid redundant reads and narration.
+<!-- END CATEGORY agent-workflow -->
 
 ---
 
