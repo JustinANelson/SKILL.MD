@@ -1,6 +1,10 @@
 ---
 name: seo-and-metadata
 description: Use when creating or updating pages, layouts, landing pages, or public web routes, to configure essential Open Graph tags, dynamic page titles, and search metadata.
+metadata:
+  category: architecture-and-devops
+  tagline: 'Social Previews & SEO'
+  summary: 'Social sharing & discovery: Open Graph tags, Twitter cards, dynamic titles, meta descriptions, and sitemaps.'
 ---
 
 # SEO & Social Metadata

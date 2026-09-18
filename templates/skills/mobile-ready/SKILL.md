@@ -1,6 +1,10 @@
 ---
 name: mobile-ready
 description: Use when building or editing UI layouts, navigation, modals, and landing pages, to guarantee clean responsiveness on mobile viewports with no horizontal scroll bugs.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Broken mobile layout and horizontal scroll leaks'
+  summary: 'Clean responsiveness: ensures touch targets (44px+), accessible drawers, and zero horizontal scroll leaks on mobile viewports.'
 ---
 
 # Mobile-Ready Responsiveness

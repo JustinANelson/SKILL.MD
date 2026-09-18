@@ -1,6 +1,10 @@
 ---
 name: docs-and-changelog
 description: Use when adding new features, modifying public APIs, changing CLI flags, or altering configurations, to keep user-facing documentation and changelogs synchronized.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Documentation Sync'
+  summary: 'Keeping README, API guides, configuration docs, and changelogs in lockstep with changes.'
 ---
 
 # Documentation & Changelog Hygiene

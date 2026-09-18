@@ -1,6 +1,10 @@
 ---
 name: security-baseline
 description: Use when writing code that handles user input, external data, secrets, or authentication, to avoid common vulnerabilities.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Secure Defaults'
+  summary: 'Core security habits: input sanitization, secret management, injection prevention.'
 ---
 
 # Security Baseline

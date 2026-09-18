@@ -1,6 +1,10 @@
 ---
 name: container-hygiene
 description: Use when writing or modifying Dockerfiles, container configs, docker-compose files, or containerized deployments, to ensure secure, lightweight, and fast image builds.
+metadata:
+  category: architecture-and-devops
+  tagline: 'Docker & Containers'
+  summary: 'Production container best practices: multi-stage Dockerfiles, non-root users, .dockerignore, and layer caching.'
 ---
 
 # Container & Docker Hygiene

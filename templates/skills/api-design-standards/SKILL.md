@@ -1,6 +1,10 @@
 ---
 name: api-design-standards
 description: Use when creating or modifying REST/HTTP API endpoints, route handlers, or RPC interfaces, to enforce clean RESTful naming, HTTP status codes, and standard response envelopes.
+metadata:
+  category: architecture-and-devops
+  tagline: 'REST & API Conventions'
+  summary: 'Clean RESTful endpoints: plural nouns, HTTP verb semantics, standard status codes, and uniform response envelopes.'
 ---
 
 # API Design Standards (REST & Route Conventions)

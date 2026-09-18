@@ -1,6 +1,10 @@
 ---
 name: loading-and-error-states
 description: Use when building asynchronous actions, data fetches, button submissions, or list views, to ensure clear UI loading feedback, error toasts, and engaging empty states.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'White screen freeze or multi-click duplicates'
+  summary: 'Zero white screens: adds skeleton loaders, disables buttons while submitting, shows error toasts, and designs helpful empty states.'
 ---
 
 # Loading, Error & Empty States

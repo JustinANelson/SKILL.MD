@@ -1,6 +1,10 @@
 ---
 name: testing-before-done
 description: Use before reporting any coding task as complete, to verify the change actually works rather than assuming it does.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Verification'
+  summary: 'Verify work thoroughly (tests, linters, types) before reporting complete.'
 ---
 
 # Testing Before Done

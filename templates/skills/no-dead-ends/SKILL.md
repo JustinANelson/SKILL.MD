@@ -1,6 +1,10 @@
 ---
 name: no-dead-ends
 description: Use when building UI features, pages, buttons, or routes, to ensure all interactive elements work end-to-end and placeholder mocks are never silently abandoned.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Buttons that do nothing and silent mock data'
+  summary: 'Honest completion: eliminates fake "dummy" buttons that do nothing, wires forms end-to-end, and flags mock data clearly.'
 ---
 
 # No Dead Ends (Honest UI & Complete Features)

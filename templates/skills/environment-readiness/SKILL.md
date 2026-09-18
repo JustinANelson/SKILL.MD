@@ -1,6 +1,10 @@
 ---
 name: environment-readiness
 description: Use whenever adding external APIs, auth providers, or environment variables, to keep .env.example synchronized and provide foolproof setup guidance.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Mystery crashes on deploy due to missing `.env`'
+  summary: 'Zero deployment amnesia: keeps `.env.example` synced, validates missing keys gracefully, and prevents runtime crashes.'
 ---
 
 # Environment Readiness (Zero Deploy Amnesia)

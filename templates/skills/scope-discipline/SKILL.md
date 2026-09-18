@@ -1,6 +1,10 @@
 ---
 name: scope-discipline
 description: Use when a task could be done in a small, targeted way or a large sweeping way, to keep changes matched to what was actually asked.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Minimal Blast Radius'
+  summary: 'Stay strictly inside requested scope; avoid drive-by refactoring.'
 ---
 
 # Scope Discipline

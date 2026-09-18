@@ -1,6 +1,10 @@
 ---
 name: auth-flow-guard
 description: Use when implementing or altering authentication (Clerk, Supabase, NextAuth, Firebase, Auth0), protected routes, or user session state, to avoid flashes of private content and null-user crashes.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Flash of private dashboard UI & null user errors'
+  summary: 'Rock-solid auth flows: stops flashes of protected content, safely handles null users, and cleans up state on logout.'
 ---
 
 # Auth Flow Guard

@@ -1,6 +1,10 @@
 ---
 name: dev-server-sanity
 description: Use when configuring ports, CORS, OAuth callbacks, local dev scripts, or environment configs, to prevent confusing port drift (3000 vs 3001) and broken local callback loops.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Port drift (3000 vs 3001) and broken OAuth loops'
+  summary: 'Port and CORS clarity: locks default ports (e.g. 3000), stops OAuth callback mismatches, and prevents CORS traps.'
 ---
 
 # Dev Server & Port Sanity

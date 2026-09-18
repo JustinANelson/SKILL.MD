@@ -1,6 +1,10 @@
 ---
 name: code-conventions
 description: Use when writing or editing code in this project to keep style, naming, and structure consistent and to avoid unnecessary complexity.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Clean Architecture'
+  summary: 'Consistent style, idiomatic naming, avoiding premature abstractions and dead code.'
 ---
 
 # Code Conventions

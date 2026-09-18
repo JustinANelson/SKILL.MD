@@ -1,6 +1,10 @@
 ---
 name: stack-consistency
 description: Use when adding UI components, styling, or libraries, to strictly reuse the project's existing framework, styling system, and component library rather than mixing rival paradigms.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'The AI installed 3 competing UI frameworks'
+  summary: 'Stop framework sprawl: reuse existing UI libraries, Tailwind/CSS patterns, and state management instead of mixing rival libraries.'
 ---
 
 # Stack Consistency (No Framework Frankenstein)

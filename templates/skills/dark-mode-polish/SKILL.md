@@ -1,6 +1,10 @@
 ---
 name: dark-mode-polish
 description: Use when writing or styling UI components, dropdowns, popups, form inputs, or typography, to ensure clean contrast and prevent unreadable white-on-white or dark-on-dark rendering in both themes.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Unreadable dark-on-dark or white-on-white text'
+  summary: 'High-contrast themes: ensures modals, inputs, and dropdowns adapt cleanly without unreadable white-on-white or dark-on-dark bugs.'
 ---
 
 # Dark Mode & Contrast Polish

@@ -1,6 +1,10 @@
 ---
 name: commit-hygiene
 description: Use when creating git commits or pull requests in this project, to keep history clean and reviewable.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Git History'
+  summary: 'Clean, focused, conventional git commits and branch discipline.'
 ---
 
 # Commit Hygiene

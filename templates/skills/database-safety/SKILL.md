@@ -1,6 +1,10 @@
 ---
 name: database-safety
 description: Use when altering database schemas, migrations, or models, to prevent accidental data loss, table resets, and destructive schema operations.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'The AI ran `--force-reset` and wiped all my data'
+  summary: 'Never wipe data: prevents accidental schema resets (`--force-reset`), destructive column drops, and protects test/production rows.'
 ---
 
 # Database Safety (Preserve Data & Sanity)

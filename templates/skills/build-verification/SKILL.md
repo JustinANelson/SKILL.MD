@@ -1,6 +1,10 @@
 ---
 name: build-verification
 description: Use before marking any feature or bug fix complete, to ensure the production build, TypeScript types, and bundler compile without deployment-blocking errors.
+metadata:
+  category: vibe-coder-essentials
+  tagline: 'Pushed to Vercel/Netlify and the build failed red'
+  summary: 'Zero deployment surprises: runs production builds and TypeScript checks before claiming completion so Vercel/Netlify never fail.'
 ---
 
 # Build Verification (Zero Deployment Surprises)

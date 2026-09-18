@@ -1,6 +1,10 @@
 ---
 name: ci-cd-pipeline
 description: Use when authoring or editing GitHub Actions workflows, CI/CD scripts, or automated pipelines, to ensure reliable, cached, and secure automated checks.
+metadata:
+  category: architecture-and-devops
+  tagline: 'Automated Workflows'
+  summary: 'Reliable automation: cached dependencies, parallel test matrices, least-privilege permissions, and GitHub Actions security.'
 ---
 
 # CI/CD Pipeline & GitHub Actions Hygiene

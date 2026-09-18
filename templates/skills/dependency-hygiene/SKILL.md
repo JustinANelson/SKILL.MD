@@ -1,6 +1,10 @@
 ---
 name: dependency-hygiene
 description: Use when adding, updating, or reviewing external libraries and package dependencies, to prevent supply-chain bloat and maintain security.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Supply Chain Safety'
+  summary: 'Supply-chain vetting, minimal dependencies, locked versions, and vulnerability audits.'
 ---
 
 # Dependency Hygiene

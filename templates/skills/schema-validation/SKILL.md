@@ -1,6 +1,10 @@
 ---
 name: schema-validation
 description: Use when handling external data, API payloads, form inputs, or environment variables, to enforce strict runtime type validation using schemas (Zod, Pydantic, etc.).
+metadata:
+  category: architecture-and-devops
+  tagline: 'Runtime Type Safety'
+  summary: 'Runtime type safety: Zod/Pydantic validation at boundaries, safe error mapping, and input sanitization.'
 ---
 
 # Schema Validation (Runtime Type Safety)

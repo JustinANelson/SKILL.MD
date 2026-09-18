@@ -1,6 +1,10 @@
 ---
 name: error-resilience
 description: Use when implementing error handling, external I/O, network requests, or parsing logic, to ensure robust failure handling, defensive checks, and clear diagnostics.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Robust Error Handling'
+  summary: 'Explicit error handling, defensive guards, safe resource cleanup, and actionable diagnostics.'
 ---
 
 # Error Resilience & Handling

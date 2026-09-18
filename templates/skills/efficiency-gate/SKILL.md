@@ -1,6 +1,10 @@
 ---
 name: efficiency-gate
 description: Use when writing or reviewing code on a hot path, loop, or query, to catch avoidable algorithmic and resource-usage regressions before they ship.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Runtime Complexity'
+  summary: 'Runtime Big-O complexity, N+1 query prevention, caching, and performance budgets.'
 ---
 
 # Efficiency Gate

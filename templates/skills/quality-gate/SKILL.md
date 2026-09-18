@@ -1,6 +1,10 @@
 ---
 name: quality-gate
 description: Use before calling changed code done, to check it against industry-standard static-analysis and coverage thresholds rather than a subjective read of the diff.
+metadata:
+  category: core-engineering-gates
+  tagline: 'Concrete Thresholds'
+  summary: 'Concrete static analysis thresholds, cyclomatic complexity limits, and test coverage standards.'
 ---
 
 # Quality Gate

@@ -1,6 +1,10 @@
 ---
 name: accessibility-baseline
 description: Use when writing or modifying HTML, UI components, forms, and dialogs, to meet WCAG 2.1 AA accessibility standards, semantic markup, and keyboard navigability.
+metadata:
+  category: architecture-and-devops
+  tagline: 'a11y & Semantic HTML'
+  summary: 'WCAG 2.1 AA compliance: semantic HTML, keyboard focus navigation, ARIA labels, and accessible dialogs.'
 ---
 
 # Accessibility Baseline (a11y & Semantic Markup)

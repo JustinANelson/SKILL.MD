@@ -1,0 +1,5 @@
+# Skill categories, in display order. Referenced by `metadata.category` in each SKILL.md.
+# Format: id | title | intro | README column header for `metadata.tagline`
+vibe-coder-essentials | 🎨 Vibe Coder Essentials | Designed to solve the most common frustrations and traps when building apps by prompting. | Solves This Vibe Coding Pain Point
+core-engineering-gates | 🛡️ Core Engineering Gates | Industry-standard software engineering practices, static analysis, and security baselines. | Focus & Discipline
+architecture-and-devops | ⚙️ Architecture & DevOps Standards | Production-grade patterns for APIs, accessibility, containerization, and automation. | Focus & Domain
