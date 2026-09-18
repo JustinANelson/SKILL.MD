@@ -46,6 +46,9 @@ curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-
 curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.sh | bash -s -- /path/to/my-app --tool cursor
 ```
 
+> [!TIP]
+> **Windows Users in PowerShell:** Use the PowerShell commands under [Windows (PowerShell)](#windows-powershell) above. In Windows PowerShell, `curl` is aliased to `Invoke-WebRequest` (which does not accept `-fsSL`). If you are running Bash/WSL from PowerShell, invoke `curl.exe` explicitly (e.g. `curl.exe -fsSL ... | bash`).
+
 ---
 
 ### 💻 Option 2: Run from Local Repository
