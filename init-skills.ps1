@@ -56,12 +56,43 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$TemplateDir = Join-Path $ScriptDir "templates"
+$ScriptDir = $null
+if ($PSScriptRoot) {
+    $ScriptDir = $PSScriptRoot
+} elseif ($MyInvocation.MyCommand.Path) {
+    $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+}
+
+$TemplateDir = if ($ScriptDir) { Join-Path $ScriptDir "templates" } else { Join-Path (Get-Location).Path "templates" }
 $SkillsDir = Join-Path $TemplateDir "skills"
+$TempDirToClean = $null
+
+if (-not (Test-Path -LiteralPath $SkillsDir)) {
+    Write-Host "[info] Templates not found locally. Fetching latest templates from GitHub (JustinANelson/SKILL.MD)..." -ForegroundColor Cyan
+    $TempZip = Join-Path ([System.IO.Path]::GetTempPath()) ("skillmd-" + [System.Guid]::NewGuid().ToString("N") + ".zip")
+    $TempDirToClean = Join-Path ([System.IO.Path]::GetTempPath()) ("skillmd-" + [System.Guid]::NewGuid().ToString("N"))
+    try {
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        Invoke-WebRequest -Uri "https://github.com/JustinANelson/SKILL.MD/archive/refs/heads/master.zip" -OutFile $TempZip -UseBasicParsing
+        Expand-Archive -LiteralPath $TempZip -DestinationPath $TempDirToClean -Force
+        Remove-Item -LiteralPath $TempZip -Force -ErrorAction SilentlyContinue
+        $ScriptDir = Join-Path $TempDirToClean "SKILL.MD-master"
+        $TemplateDir = Join-Path $ScriptDir "templates"
+        $SkillsDir = Join-Path $TemplateDir "skills"
+    } catch {
+        Write-Error "[error] Failed to fetch templates from GitHub: $_"
+        if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
+            Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
+        }
+        exit 1
+    }
+}
 
 if (-not (Test-Path -LiteralPath $SkillsDir)) {
     Write-Error "[error] Skills templates folder not found at: $SkillsDir"
+    if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
+        Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
+    }
     exit 1
 }
 
@@ -109,6 +140,9 @@ if ($List) {
         Write-Host $s.Description
     }
     Write-Host ("-" * 75)`n
+    if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
+        Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
+    }
     exit 0
 }
 
@@ -116,7 +150,7 @@ if ($List) {
 $ResolvedTarget = [System.IO.Path]::GetFullPath($Target)
 
 # Safety check: prevent accidentally initializing into the template repo itself unless forced
-if ($ResolvedTarget -eq [System.IO.Path]::GetFullPath($ScriptDir) -and -not $Force) {
+if (-not $TempDirToClean -and $ScriptDir -and $ResolvedTarget -eq [System.IO.Path]::GetFullPath($ScriptDir) -and -not $Force) {
     Write-Warning "Target is the SKILL.MD template repository itself."
     Write-Warning "If you really want to initialize here, pass -Force."
     exit 0
@@ -263,6 +297,10 @@ if ($Tool -in @("agents", "all")) {
     $doc = Build-AggregatedMarkdown "Repository Agent Guidelines (AGENTS.md)" "General agent guidelines, coding standards, and operational gates for AI assistants."
     $dest = Join-Path $ResolvedTarget "AGENTS.md"
     Save-FileContent -DestinationPath $dest -Content $doc
+}
+
+if ($TempDirToClean -and (Test-Path -LiteralPath $TempDirToClean)) {
+    Remove-Item -LiteralPath $TempDirToClean -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host "`n[done] Initialization complete.`n" -ForegroundColor Green

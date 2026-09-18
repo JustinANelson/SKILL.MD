@@ -4,9 +4,14 @@
 # ==============================================================================
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -n "${BASH_SOURCE[0]:-}" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+else
+  SCRIPT_DIR="${PWD}"
+fi
 TEMPLATES_DIR="${SCRIPT_DIR}/templates"
 SKILLS_DIR="${TEMPLATES_DIR}/skills"
+IS_REMOTE=0
 
 TARGET="${PWD}"
 TOOL="claude"
@@ -79,6 +84,28 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ! -d "${SKILLS_DIR}" ]]; then
+  echo "[info] Templates not found locally. Fetching latest templates from GitHub (JustinANelson/SKILL.MD)..."
+  TMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t 'skillmd')"
+  IS_REMOTE=1
+  trap 'rm -rf "${TMP_DIR}"' EXIT
+
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "https://github.com/JustinANelson/SKILL.MD/archive/refs/heads/master.tar.gz" | tar -xz -C "${TMP_DIR}"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO- "https://github.com/JustinANelson/SKILL.MD/archive/refs/heads/master.tar.gz" | tar -xz -C "${TMP_DIR}"
+  elif command -v git >/dev/null 2>&1; then
+    git clone --depth 1 "https://github.com/JustinANelson/SKILL.MD.git" "${TMP_DIR}/SKILL.MD-master" >/dev/null 2>&1
+  else
+    echo "[error] curl, wget, or git is required to download templates from GitHub." >&2
+    exit 1
+  fi
+
+  SCRIPT_DIR="${TMP_DIR}/SKILL.MD-master"
+  TEMPLATES_DIR="${SCRIPT_DIR}/templates"
+  SKILLS_DIR="${TEMPLATES_DIR}/skills"
+fi
+
+if [[ ! -d "${SKILLS_DIR}" ]]; then
   echo "[error] Templates directory not found at: ${SKILLS_DIR}" >&2
   exit 1
 fi
@@ -104,7 +131,7 @@ fi
 TARGET="$(cd "${TARGET}" 2>/dev/null && pwd || echo "${TARGET}")"
 
 # Safety check
-if [[ "${TARGET}" == "${SCRIPT_DIR}" && ${FORCE} -eq 0 ]]; then
+if [[ ${IS_REMOTE} -eq 0 && "${TARGET}" == "${SCRIPT_DIR}" && ${FORCE} -eq 0 ]]; then
   echo "[warning] Target is the SKILL.MD template repository itself."
   echo "Pass --force if you intentionally wish to install here."
   exit 0

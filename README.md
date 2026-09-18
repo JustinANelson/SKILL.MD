@@ -8,19 +8,66 @@ Whether you are an enterprise team enforcing strict quality gates or a **vibe co
 
 ## Quickstart
 
+You can initialize skills directly into any project from the public GitHub repository, or clone the repository to run locally.
+
+### 🌐 Option 1: Direct from Public Repo (No Clone Needed)
+
+Run directly from inside your project repository without cloning:
+
+#### Windows (PowerShell)
+
+```powershell
+# Initialize Claude Code skills (default) in current project
+irm https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.ps1 | iex
+
+# Initialize for Cursor (.cursor/rules/*.mdc)
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.ps1))) -Tool cursor
+
+# Initialize for all supported assistants with overwrite
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.ps1))) -Tool all -Force
+
+# Target a specific directory
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.ps1))) -Target "C:\path\to\my-app" -Tool cursor
+```
+
+#### macOS / Linux / WSL (Bash / Zsh)
+
+```bash
+# Initialize Claude Code skills (default) in current project
+curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.sh | bash
+
+# Initialize for Cursor (.cursor/rules/*.mdc)
+curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.sh | bash -s -- --tool cursor
+
+# Initialize for all supported assistants with overwrite
+curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.sh | bash -s -- --tool all --force
+
+# Target a specific directory
+curl -fsSL https://raw.githubusercontent.com/JustinANelson/SKILL.MD/master/init-skills.sh | bash -s -- /path/to/my-app --tool cursor
+```
+
+---
+
+### 💻 Option 2: Run from Local Repository
+
 Clone or download this repository, then run the initializer targeting your project directory:
 
-### Windows (PowerShell / CMD)
+```bash
+git clone https://github.com/JustinANelson/SKILL.MD.git
+cd SKILL.MD
+```
+
+#### Windows (PowerShell / CMD)
 
 ```powershell
 # Initialize Claude Code skills in current directory
 .\init-skills.ps1
 
-# Initialize for Cursor (.cursor/rules/*.mdc)
+# Initialize for Cursor (.cursor/rules/*.mdc) targeting your app
 .\init-skills.ps1 -Target "C:\path\to\my-app" -Tool cursor
 
 # Initialize for all supported assistants with overwrite
-.\init-skills.ps1 -Tool all -Force
+.\init-skills.ps1 -Target "C:\path\to\my-app" -Tool all -Force
 ```
 
 You can also run directly from Command Prompt via `init-skills.bat`:
@@ -28,7 +75,7 @@ You can also run directly from Command Prompt via `init-skills.bat`:
 init-skills.bat "C:\path\to\my-app" --tool all
 ```
 
-### macOS / Linux / WSL (Bash / Zsh)
+#### macOS / Linux / WSL (Bash / Zsh)
 
 ```bash
 # Make script executable (first time only)
