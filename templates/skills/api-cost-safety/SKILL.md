@@ -2,7 +2,7 @@
 name: api-cost-safety
 description: Use when integrating LLMs, paid AI APIs (OpenAI, Anthropic, Replicate), or third-party webhooks, to protect secret keys from browser exposure and prevent accidental credit drain.
 metadata:
-  category: vibe-coder-essentials
+  category: ai-llm-engineering
   tagline: 'Leaked AI keys or accidental $50 credit drains'
   summary: 'Credit and secret protection: keeps paid AI keys server-side only, enforces `max_tokens` limits, debounces inputs, and blocks infinite retry loops.'
 ---

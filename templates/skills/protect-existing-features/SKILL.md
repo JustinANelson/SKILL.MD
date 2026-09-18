@@ -2,7 +2,7 @@
 name: protect-existing-features
 description: Use when modifying existing code or adding new features, to guarantee that previously working functionality, routes, and UI flows do not silently break.
 metadata:
-  category: vibe-coder-essentials
+  category: agent-workflow
   tagline: 'The AI broke what was working 5 minutes ago'
   summary: 'Stop the regression loop: never break previously working flows or routes when adding new code.'
 ---

@@ -2,7 +2,7 @@
 name: human-handoff
 description: Use when completing a task or prompt, to provide clear, jargon-free instructions, exact URLs/clicks to verify the work, and explicit next steps.
 metadata:
-  category: vibe-coder-essentials
+  category: agent-workflow
   tagline: 'Confusing walls of technical jargon'
   summary: 'Clear next steps: delivers exact localhost URLs, click-by-click test instructions, and zero engineering jargon.'
 ---

@@ -2,8 +2,8 @@
 name: token-efficiency
 description: Use whenever writing code, exploring a codebase, or replying to the user, to keep assistant context and tool responses lean and avoid wasting tokens on redundant reads or narration.
 metadata:
-  category: core-engineering-gates
-  tagline: 'Context Economy'
+  category: agent-workflow
+  tagline: 'Context wasted on repeated file dumps and narration'
   summary: 'Keep assistant context and tool responses lean; avoid redundant reads and narration.'
 ---
 
